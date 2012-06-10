@@ -123,7 +123,7 @@ Oscillator.prototype.process = function(e) {
 		while (this.phase > 1.0) this.phase -= 1;	
 	}
 	this.attack = false;
-	this.sustain = true;
+	this.sustain = false;
 }
 
 /**
