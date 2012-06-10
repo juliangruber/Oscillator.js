@@ -21,7 +21,11 @@ function Oscillator(context, shape) {
 	this.sampleRate = this.context.sampleRate;
 	this.amplitude = 1;
 	this.attack = false;
+	this.attackC = 0;
+	this.attackM = 1000;
 	this.sustain = false;
+	this.sustainC = 0;
+	this.sustainM = 1000;
 	
 	// Define: 
 	//   workingBuffer for pre-amplified waveform.
@@ -112,9 +116,16 @@ Oscillator.prototype.process = function(e) {
 		this.workingBuffer[i] = this.getSample();
 		
 		//Process the raw waveform
+		if (this.attack) {
+			if (this.attackC < this.attackM) {
+				this.workingBuffer[i] *= this.attackC / this.attackM;
+				this.attackC++;
+			} else {
+				this.attack = false;
+			}
+		}
+		
 		this.outputBufferLeft[i] = this.outputBufferRight[i] = this.workingBuffer[i] * this.amplitude
-		/** ((i/this.outputBufferLeft.length > 1 || !this.attack) ? 1 : i/this.outputBufferLeft.length)
-		* ((((this.outputBufferLeft.length-i)/this.outputBufferLeft.length) > 1 || !this.sustain) ? 1 : (this.outputBufferLeft.length-i)/this.outputBufferLeft.length)*/;
 		
 		//Advance the phase
 		this.phase += this.frequency / this.sampleRate + this.calculatePhaseModulation(i);
@@ -122,8 +133,6 @@ Oscillator.prototype.process = function(e) {
 		//Wrap the waveform
 		while (this.phase > 1.0) this.phase -= 1;	
 	}
-	this.attack = false;
-	this.sustain = false;
 }
 
 /**
@@ -131,6 +140,7 @@ Oscillator.prototype.process = function(e) {
  */
 Oscillator.prototype.play = function() {
 	this.attack = true;
+	this.attackC = 0;
 	this.node.connect(this.context.destination);
 	this.playing = true;
 }
