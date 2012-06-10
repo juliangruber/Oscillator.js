@@ -24,8 +24,7 @@ function Oscillator(context, shape) {
 	this.attackC = 0;
 	this.attackM = 10000;
 	this.sustain = false;
-	this.sustainC = 0;
-	this.sustainM = 1000;
+	this.sustainC = this.sustainM = 1000;
 	
 	// Define: 
 	//   workingBuffer for pre-amplified waveform.
@@ -122,6 +121,18 @@ Oscillator.prototype.process = function(e) {
 				this.attackC++;
 			} else {
 				this.attack = false;
+				this.attackC = 0;
+			}
+		}
+		if (this.sustain) {
+			if (this.sustainC > 0) {
+				this.workingBuffer[i] *= this.sustainC / this.sustainM;
+				this.sustainC--;
+			} else {
+				this.sustain = false;
+				this.node.disconnect();
+				this.playing = false;
+				this.sustainC = this.sustainM;
 			}
 		}
 		
@@ -150,8 +161,6 @@ Oscillator.prototype.play = function() {
  */
 Oscillator.prototype.pause = function() {
 	this.sustain = true;
-	this.node.disconnect();
-	this.playing = false;
 }
 
 /**
