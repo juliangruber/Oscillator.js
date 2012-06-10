@@ -22,7 +22,7 @@ function Oscillator(context, shape) {
 	this.amplitude = 1;
 	this.attack = false;
 	this.attackC = 0;
-	this.attackM = 1000;
+	this.attackM = 10000;
 	this.sustain = false;
 	this.sustainC = 0;
 	this.sustainM = 1000;
