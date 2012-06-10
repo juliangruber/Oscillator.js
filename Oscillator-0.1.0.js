@@ -20,8 +20,9 @@ function Oscillator(context, shape) {
 	this.shape = shape;
 	this.frequency = 440;	
 	this.sampleRate = this.context.sampleRate;
-	this.amplitude = 1
-	this.attack = 0
+	this.amplitude = 1;
+	this.attack = 0;
+	this.sustain = 0;
 	
 	// Define: 
 	//   workingBuffer for pre-amplified waveform.
@@ -112,15 +113,19 @@ Oscillator.prototype.process = function(e) {
 		this.workingBuffer[i] = this.getSample();
 		
 		//Process the raw waveform
-		this.outputBufferLeft[i] = this.outputBufferRight[i] = this.workingBuffer[i] * this.amplitude * ((i/100 > 1 || !this.attack) ? 1 : i/100);
+		this.outputBufferLeft[i] = this.outputBufferRight[i] = this.workingBuffer[i] * this.amplitude
+		* ((i/100 > 1 || !this.attack) ? 1 : i/100)
+		* ((this.outputBufferLeft.length-i)/100) > 1 || !this.sustain ? 1 : (this.outputBufferLeft.length-i)/100);
 		
 		//Advance the phase
 		this.phase += this.frequency / this.sampleRate + this.calculatePhaseModulation(i);
 		
 		//Wrap the waveform
 		while (this.phase > 1.0) this.phase -= 1;
-		this.attack = 0;
+		
 	}
+	this.attack = 0;
+	this.sustain = 0;
 }
 
 /**
@@ -136,6 +141,7 @@ Oscillator.prototype.play = function() {
  * Stops the oscillator
  */
 Oscillator.prototype.pause = function() {
+	this.sustain = 1;
 	this.node.disconnect();
 	this.playing = false;
 }
