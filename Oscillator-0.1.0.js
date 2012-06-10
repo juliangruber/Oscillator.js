@@ -111,7 +111,7 @@ Oscillator.prototype.process = function(e) {
 		this.workingBuffer[i] = this.getSample();
 		
 		//Process the raw waveform
-		this.outputBufferLeft[i] = this.outputBufferRight[i] = this.workingBuffer[i] * this.amplitude;
+		this.outputBufferLeft[i] = this.outputBufferRight[i] = this.workingBuffer[i] * this.amplitude * (i/100 > 1 ? 1 : i/100);
 		
 		//Advance the phase
 		this.phase += this.frequency / this.sampleRate + this.calculatePhaseModulation(i);
