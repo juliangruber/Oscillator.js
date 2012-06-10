@@ -13,7 +13,7 @@ function Oscillator(context, shape) {
 	this.context = context;
 
 	// Create an audio node
-	this.node = context.createJavaScriptNode(1024, 0, 2);	
+	this.node = context.createJavaScriptNode(1024, 2, 2);	
 	
 	// Used to generate waveform shape
 	this.phase = 0;
