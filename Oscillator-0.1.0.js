@@ -24,7 +24,7 @@ function Oscillator(context, shape) {
 	this.attackC = 0;
 	this.attackM = 10000;
 	this.sustain = false;
-	this.sustainC = this.sustainM = 1000;
+	this.sustainC = this.sustainM = 10000;
 	
 	// Define: 
 	//   workingBuffer for pre-amplified waveform.
