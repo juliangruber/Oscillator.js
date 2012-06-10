@@ -115,7 +115,7 @@ Oscillator.prototype.process = function(e) {
 		//Process the raw waveform
 		this.outputBufferLeft[i] = this.outputBufferRight[i] = this.workingBuffer[i] * this.amplitude
 		* ((i/100 > 1 || !this.attack) ? 1 : i/100)
-		* (((this.outputBufferLeft.length-i)/100) > 1 || !this.sustain ? 1 : (this.outputBufferLeft.length-i)/100);
+		* ((((this.outputBufferLeft.length-i)/100) > 1 || !this.sustain) ? 1 : (this.outputBufferLeft.length-i)/100);
 		
 		//Advance the phase
 		this.phase += this.frequency / this.sampleRate + this.calculatePhaseModulation(i);
