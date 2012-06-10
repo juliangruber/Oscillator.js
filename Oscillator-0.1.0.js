@@ -8,7 +8,6 @@
  *
  */
 function Oscillator(context, shape) {
-	console.log(context);
 	//Context the oscillator is in
 	this.context = context;
 
@@ -21,8 +20,8 @@ function Oscillator(context, shape) {
 	this.frequency = 440;	
 	this.sampleRate = this.context.sampleRate;
 	this.amplitude = 1;
-	this.attack = 0;
-	this.sustain = 0;
+	this.attack = false;
+	this.sustain = false;
 	
 	// Define: 
 	//   workingBuffer for pre-amplified waveform.
@@ -121,18 +120,17 @@ Oscillator.prototype.process = function(e) {
 		this.phase += this.frequency / this.sampleRate + this.calculatePhaseModulation(i);
 		
 		//Wrap the waveform
-		while (this.phase > 1.0) this.phase -= 1;
-		
+		while (this.phase > 1.0) this.phase -= 1;	
 	}
-	this.attack = 0;
-	this.sustain = 0;
+	this.attack = false;
+	this.sustain = true;
 }
 
 /**
  * Starts the oscillator
  */
 Oscillator.prototype.play = function() {
-	this.attack = 1;
+	this.attack = true;
 	this.node.connect(this.context.destination);
 	this.playing = true;
 }
@@ -141,7 +139,7 @@ Oscillator.prototype.play = function() {
  * Stops the oscillator
  */
 Oscillator.prototype.pause = function() {
-	this.sustain = 1;
+	this.sustain = true;
 	this.node.disconnect();
 	this.playing = false;
 }
